@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang=fr>
+    <head>
+        <meta charset="utf-8" />
+        <title>gestionnaire</title>
+    </head>
+    <body>
+        <header>
+            <h1>Bienvenue sur votre getionnaire personnel</h1>
+            <h3>inscription</h3>
+        </header>
+        <a href="{{ url_for('connexion') }}">Se connecter</a><br>
+        <section>
+            <form method="post">
+                <label for='login'>Votre identifiant :</label>
+                <input type="text" id="login" name="login" required pattern="[A-Za-z '\-]+" maxlength="30"><br>
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password"><br>
+                <button type="submit">S'inscrire</button>
+            </form>
+            <p>{{ erreur }}</p>
+        </section>
+    </body>
+</html>

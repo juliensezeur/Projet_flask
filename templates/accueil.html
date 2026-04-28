@@ -1,0 +1,42 @@
+<!-- templates/accueil.html -->
+<!DOCTYPE html>
+<html lang=fr>
+    <head>
+        <meta charset="utf-8" />
+        <title>Acceuil gestionnaire</title>
+    </head>
+    <body>
+        <header>
+            <h1>bienvenue {{username}}</h1><br>
+            <p>rentrer ici le nom de l'application et l'identifiant pour lequel vous voulez récupéré le mot de passe</p>
+            <form method="post">
+                <label for='appli_log'>Application</label>
+                <input type="text" id="appli_log" name="appli_log"><br>
+                <label for='login_log'>identifiant</label>
+                <input type="text" id="login_log" name="login_log"><br><br>
+                <button type="submit">afficher mot de passe</button><br>
+            </form>
+            <p>{{erreur_1}}</p><br><br>
+            <p>taper ici pour enregistrer un nouvelle identifiant et mot de passe</p>
+            <form method="post">
+                <label for='appli_add'>Application</label>
+                <input type="text" id="appli_add" name="appli_add"><br>
+                <label for='login_add'>Identifiant</label>
+                <input type="text" id="login_add" name="login_add"><br>
+                <label for='password_add'>Mot de passe</label>
+                <input type="password" id="password_add" name="password_add"><br><br>
+                <button type="submit">enregistrer mot de passe</button>
+            </form>
+            <p>{{erreur_2}}</p><br><br>
+            <p>taper ici pour suprimé un mot de passe</p>
+            <form method="post">
+                <label for='appli_del'>Application</label>
+                <input type="text" id="appli_del" name="appli_del"><br>
+                <label for='login_del'>identifiant</label>
+                <input type="text" id="login_del" name="login_del"><br><br>
+                <button type="submit">suprimé mot de passe</button><br>
+            </form>
+            <p>{{erreur_3}}</p>
+        </header>
+    </body>
+</html>
