@@ -36,7 +36,8 @@
                 <input type="text" id="login_del" name="login_del"><br><br>
                 <button type="submit">suprimé mot de passe</button><br>
             </form>
-            <p>{{erreur_3}}</p>
+            <p>{{erreur_3}}</p><br>
+            <a href="{{ url_for('logout') }}">Se déconnecter</a>
         </header>
     </body>
 </html>

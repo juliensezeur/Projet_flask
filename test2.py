@@ -5,28 +5,29 @@ import mysql.connector
 app = Flask(__name__)
 app.secret_key = "ADMIN"
 
-@app.route("/", methods=["GET", "POST"])
-def connexion():
-    erreur = ""
-    db = mysql.connector.connect(
+db = mysql.connector.connect(
         user='julien-sezeur_hinderchiette',
         password='<jhYE47oi(',
         database='julien-sezeur_test',
         host='mysql-julien-sezeur.alwaysdata.net'
     )
+
+@app.route("/", methods=["GET", "POST"])
+def connexion():
+    erreur = ""
     if request.method == "POST":
         username = request.form.get("login", "").strip()
         password = request.form.get("password", "")
-        ma_bdd = db.cursor()
-        verif = f"SELECT `username`, `password` FROM `users` WHERE username = '{username}'"
-        ma_bdd.execute(verif)
-        verif = ma_bdd.fetchall()
-        if verif == []:
-            erreur = "Identifiants invalides."
-        else :
-            if not username or not password:
-                erreur = "Merci de remplir tous les champs."
-            else:
+        if not username or not password:
+            erreur = "Merci de remplir tous les champs."
+        else:
+            ma_bdd = db.cursor()
+            verif = f"SELECT `username`, `password` FROM `users` WHERE username = '{username}'"
+            ma_bdd.execute(verif)
+            verif = ma_bdd.fetchall()
+            if verif == []:
+                erreur = "Identifiants invalides."
+            else :
                 if username == verif[0][0] and password == verif[0][1]:
                     erreur = "réussit"
                     session["username"] = verif[0][0]
@@ -39,12 +40,6 @@ def connexion():
 def accueil():
     if "username" not in session:
         return redirect(url_for("connexion"))
-    db = mysql.connector.connect(
-        user='julien-sezeur_hinderchiette',
-        password='<jhYE47oi(',
-        database='julien-sezeur_test',
-        host='mysql-julien-sezeur.alwaysdata.net'
-    )
     erreur_1 = ""
     erreur_2 = ""
     erreur_3 = ""
@@ -66,6 +61,7 @@ def accueil():
                 else :
                     suprimé = f"DELETE FROM `mot de passe` WHERE appli = '{appli_del}' AND login = '{username_del}'"
                     ma_bdd.execute(suprimé)
+                    db.commit()
                     verif = f"SELECT `appli`, `login` FROM `mot de passe` WHERE login = '{username_del}' AND appli ='{appli_del}'"
                     ma_bdd.execute(verif)
                     verif = ma_bdd.fetchall()
@@ -80,6 +76,7 @@ def accueil():
                 if verif == []:
                     insert = f"INSERT INTO `mot de passe`(`appli`, `login`, `password`) VALUES ('{appli_add}','{username_add}','{password_add}')"
                     ma_bdd.execute(insert)
+                    db.commit()
                     verif = f"SELECT `appli`, `login`, `password` FROM `mot de passe` WHERE login = '{username_add}' AND appli ='{appli_add}'"
                     ma_bdd.execute(verif)
                     verif = ma_bdd.fetchall()
@@ -102,12 +99,6 @@ def accueil():
 @app.route("/inscription", methods=["GET", "POST"])
 def inscription():
     erreur = ""
-    db = mysql.connector.connect(
-        user='julien-sezeur_hinderchiette',
-        password='<jhYE47oi(',
-        database='julien-sezeur_test',
-        host='mysql-julien-sezeur.alwaysdata.net'
-    )
     if request.method == "POST":
         username = request.form.get("login", "").strip()
         password = request.form.get("password", "")
@@ -121,6 +112,7 @@ def inscription():
             if verif == []:
                 insert = f"INSERT INTO `users` (`username`, `password`) VALUES ('{username}','{password}')"
                 ma_bdd.execute(insert)
+                db.commit()
                 verif = f"SELECT `username`, `password` FROM `users` WHERE username = '{username}'"
                 ma_bdd.execute(verif)
                 verif = ma_bdd.fetchall()
