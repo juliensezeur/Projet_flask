@@ -126,6 +126,7 @@ def inscription():
                 verif = ma_bdd.fetchall()
                 if username == verif[0][0] and password == verif[0][1]:
                     erreur = "inscription réussit"
+                    session["username"] = verif[0][0]
                     return redirect(url_for("accueil"))
                 else:
                     erreur = "problème lors de l'inscription ou de la vérification d'inscription"
