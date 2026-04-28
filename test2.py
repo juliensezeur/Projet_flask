@@ -9,8 +9,8 @@ app.secret_key = "ADMIN"
 def connexion():
     erreur = ""
     db = mysql.connector.connect(
-        user='julien-sezeur_1',
-        password='Ty;!509hyr',
+        user='julien-sezeur_hinderchiette',
+        password='<jhYE47oi(',
         database='julien-sezeur_test',
         host='mysql-julien-sezeur.alwaysdata.net'
     )
@@ -40,8 +40,8 @@ def accueil():
     if "username" not in session:
         return redirect(url_for("connexion"))
     db = mysql.connector.connect(
-        user='julien-sezeur_1',
-        password='Ty;!509hyr',
+        user='julien-sezeur_hinderchiette',
+        password='<jhYE47oi(',
         database='julien-sezeur_test',
         host='mysql-julien-sezeur.alwaysdata.net'
     )
@@ -103,8 +103,8 @@ def accueil():
 def inscription():
     erreur = ""
     db = mysql.connector.connect(
-        user='julien-sezeur_1',
-        password='Ty;!509hyr',
+        user='julien-sezeur_hinderchiette',
+        password='<jhYE47oi(',
         database='julien-sezeur_test',
         host='mysql-julien-sezeur.alwaysdata.net'
     )
