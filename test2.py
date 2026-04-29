@@ -6,12 +6,11 @@ app = Flask(__name__)
 app.secret_key = "ADMIN"
 
 db = mysql.connector.connect(
-        user='julien-sezeur_hinderchiette',
-        password='<jhYE47oi(',
+        user='julien-sezeur_1',
+        password='Ty;!509hyr',
         database='julien-sezeur_test',
         host='mysql-julien-sezeur.alwaysdata.net'
     )
-
 @app.route("/", methods=["GET", "POST"])
 def connexion():
     erreur = ""
@@ -22,7 +21,7 @@ def connexion():
             erreur = "Merci de remplir tous les champs."
         else:
             ma_bdd = db.cursor()
-            verif = f"SELECT `username`, `password` FROM `users` WHERE username = '{username}'"
+            verif = f"SELECT `username`, `password` FROM `user` WHERE username = '{username}'"
             ma_bdd.execute(verif)
             verif = ma_bdd.fetchall()
             if verif == []:
@@ -43,6 +42,7 @@ def accueil():
     erreur_1 = ""
     erreur_2 = ""
     erreur_3 = ""
+    username = session["username"]
     if request.method == "POST":
         appli_log = request.form.get("appli_log", "").strip()
         username_log = request.form.get("login_log", "").strip()
@@ -59,10 +59,10 @@ def accueil():
                     erreur_2 = erreur_1
                     erreur_3 = erreur_1
                 else :
-                    suprimé = f"DELETE FROM `mot de passe` WHERE appli = '{appli_del}' AND login = '{username_del}'"
+                    suprimé = f"DELETE FROM `mot_de_passe_{username}` WHERE appli = '{appli_del}' AND login = '{username_del}'"
                     ma_bdd.execute(suprimé)
                     db.commit()
-                    verif = f"SELECT `appli`, `login` FROM `mot de passe` WHERE login = '{username_del}' AND appli ='{appli_del}'"
+                    verif = f"SELECT `appli`, `login` FROM `mot_de_passe_{username}` WHERE login = '{username_del}' AND appli ='{appli_del}'"
                     ma_bdd.execute(verif)
                     verif = ma_bdd.fetchall()
                     if verif ==[]:
@@ -70,14 +70,14 @@ def accueil():
                     else :
                         erreur_3 = "échec de la supréssion"
             else:
-                verif = f"SELECT `appli`, `login` FROM `mot de passe` WHERE login = '{username_add}' AND appli ='{appli_add}'"
+                verif = f"SELECT `appli`, `login` FROM `mot_de_passe_{username}` WHERE login = '{username_add}' AND appli ='{appli_add}'"
                 ma_bdd.execute(verif)
                 verif = ma_bdd.fetchall()
                 if verif == []:
-                    insert = f"INSERT INTO `mot de passe`(`appli`, `login`, `password`) VALUES ('{appli_add}','{username_add}','{password_add}')"
+                    insert = f"INSERT INTO `mot_de_passe_{username}`(`appli`, `login`, `password`) VALUES ('{appli_add}','{username_add}','{password_add}')"
                     ma_bdd.execute(insert)
                     db.commit()
-                    verif = f"SELECT `appli`, `login`, `password` FROM `mot de passe` WHERE login = '{username_add}' AND appli ='{appli_add}'"
+                    verif = f"SELECT `appli`, `login`, `password` FROM `mot_de_passe_{username}` WHERE login = '{username_add}' AND appli ='{appli_add}'"
                     ma_bdd.execute(verif)
                     verif = ma_bdd.fetchall()
                     if appli_add == verif[0][0] and username_add == verif[0][1] and password_add == verif[0][2]:
@@ -87,7 +87,7 @@ def accueil():
                 else:
                     erreur_2 = "un mot de passe est déja enregistrer pour cette appli et ce login"
         else:
-            password = f"SELECT `password` FROM `mot de passe` WHERE login = '{username_log}' AND appli ='{appli_log}'"
+            password = f"SELECT `password` FROM `mot_de_passe_{username}` WHERE login = '{username_log}' AND appli ='{appli_log}'"
             ma_bdd.execute(password)
             password = ma_bdd.fetchall()
             if password == []:
@@ -106,14 +106,17 @@ def inscription():
             erreur = "Merci de remplir tous les champs."
         else:
             ma_bdd = db.cursor()
-            verif = f"SELECT `username` FROM `users` WHERE username = '{username}'"
+            verif = f"SELECT `username` FROM `user` WHERE username = '{username}'"
             ma_bdd.execute(verif)
             verif = ma_bdd.fetchall()
             if verif == []:
-                insert = f"INSERT INTO `users` (`username`, `password`) VALUES ('{username}','{password}')"
+                insert = f"INSERT INTO `user` (`username`, `password`) VALUES ('{username}','{password}')"
                 ma_bdd.execute(insert)
                 db.commit()
-                verif = f"SELECT `username`, `password` FROM `users` WHERE username = '{username}'"
+                create = f"CREATE TABLE `mot_de_passe_{username}` (`id` int PRIMARY KEY NOT NULL AUTO_INCREMENT, `appli` text NOT NULL, `login` text NOT NULL, `password` text NOT NULL)"
+                ma_bdd.execute(create)
+                db.commit()
+                verif = f"SELECT `username`, `password` FROM `user` WHERE username = '{username}'"
                 ma_bdd.execute(verif)
                 verif = ma_bdd.fetchall()
                 if username == verif[0][0] and password == verif[0][1]:
